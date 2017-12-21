@@ -23,10 +23,16 @@ type Client struct {
 type auth struct {
 	app_id, secret string
 	user, password string
+	access_token   string
 }
 
 func NewOAuth(i, s string) *Client {
 	a := &auth{app_id: i, secret: s}
+	return injectClient(a)
+}
+
+func NewAuthHeader(at string) *Client {
+	a := &auth{access_token: at}
 	return injectClient(a)
 }
 
@@ -82,6 +88,11 @@ func (c *Client) execute(method string, urlStr string, text string) (interface{}
 
 	if c.Auth.user != "" && c.Auth.password != "" {
 		req.SetBasicAuth(c.Auth.user, c.Auth.password)
+	}
+
+	if c.Auth.access_token != "" {
+		authHeader := fmt.Sprintf("Bearer %s", c.Auth.access_token)
+		req.Header.Set("Authorization", authHeader)
 	}
 
 	client := new(http.Client)
