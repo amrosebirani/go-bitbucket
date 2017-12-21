@@ -79,6 +79,7 @@ type webhooks interface {
 	Create(opt WebhooksOptions) (interface{}, error)
 	Update(opt WebhooksOptions) (interface{}, error)
 	Delete(opt WebhooksOptions) (interface{}, error)
+	CreateOnTeam(opt WebhooksTeamOptions) (interface{}, error)
 }
 
 type teams interface {
@@ -88,6 +89,7 @@ type teams interface {
 	Followers(teamname string) (interface{}, error)
 	Following(teamname string) (interface{}, error)
 	Repositories(teamname string) (interface{}, error)
+	Hooks(teamname string) (interface{}, error)
 }
 
 type RepositoriesOptions struct {
@@ -158,6 +160,15 @@ type DiffOptions struct {
 type WebhooksOptions struct {
 	Owner       string   `json:"owner"`
 	Repo_slug   string   `json:"repo_slug"`
+	Uuid        string   `json:"uuid"`
+	Description string   `json:"description"`
+	Url         string   `json:"url"`
+	Active      bool     `json:"active"`
+	Events      []string `json:"events"` // EX) {'repo:push','issue:created',..} REF) https://goo.gl/VTj93b
+}
+
+type WebhooksTeamOptions struct {
+	Team        string   `json:"team"`
 	Uuid        string   `json:"uuid"`
 	Description string   `json:"description"`
 	Url         string   `json:"url"`

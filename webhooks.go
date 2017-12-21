@@ -11,6 +11,31 @@ type Webhooks struct {
 	c *Client
 }
 
+func (r *Webhooks) buildWebhooksTeamBody(ro *WebhooksTeamOptions) string {
+
+	body := map[string]interface{}{}
+
+	if ro.Description != "" {
+		body["description"] = ro.Description
+	}
+	if ro.Url != "" {
+		body["url"] = ro.Url
+	}
+	if ro.Active == true || ro.Active == false {
+		body["active"] = ro.Active
+	}
+
+	body["events"] = ro.Events
+
+	data, err := json.Marshal(body)
+	if err != nil {
+		pp.Println(err)
+		os.Exit(9)
+	}
+
+	return string(data)
+}
+
 func (r *Webhooks) buildWebhooksBody(ro *WebhooksOptions) string {
 
 	body := map[string]interface{}{}
@@ -44,6 +69,12 @@ func (r *Webhooks) Gets(ro *WebhooksOptions) (interface{}, error) {
 func (r *Webhooks) Create(ro *WebhooksOptions) (interface{}, error) {
 	data := r.buildWebhooksBody(ro)
 	urlStr := r.c.requestUrl("/repositories/%s/%s/hooks", ro.Owner, ro.Repo_slug)
+	return r.c.execute("POST", urlStr, data)
+}
+
+func (r *Webhooks) CreateOnTeam(ro *WebhooksTeamOptions) (interface{}, error) {
+	data := r.buildWebhooksTeamBody(ro)
+	urlStr := r.c.requestUrl("/teams/%s/hooks", ro.Team)
 	return r.c.execute("POST", urlStr, data)
 }
 
