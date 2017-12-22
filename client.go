@@ -16,6 +16,7 @@ type Client struct {
 	Users        users
 	User         user
 	Teams        teams
+	Projects     projects
 	Repositories *Repositories
 	Pagelen      uint64
 }
@@ -57,6 +58,7 @@ func injectClient(a *auth) *Client {
 	c.Users = &Users{c: c}
 	c.User = &User{c: c}
 	c.Teams = &Teams{c: c}
+	c.Projects = &Projects{c: c}
 	return c
 }
 

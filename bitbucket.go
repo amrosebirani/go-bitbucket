@@ -90,6 +90,11 @@ type teams interface {
 	Following(teamname string) (interface{}, error)
 	Repositories(teamname string) (interface{}, error)
 	Hooks(teamname string) (interface{}, error)
+	Projects(teamname string) (interface{}, error)
+}
+
+type projects interface {
+	CreateOnTeam(opt *ProjectsTeamOptions) (interface{}, error)
 }
 
 type RepositoriesOptions struct {
@@ -174,4 +179,12 @@ type WebhooksTeamOptions struct {
 	Url         string   `json:"url"`
 	Active      bool     `json:"active"`
 	Events      []string `json:"events"` // EX) {'repo:push','issue:created',..} REF) https://goo.gl/VTj93b
+}
+
+type ProjectsTeamOptions struct {
+	Team        string `json:"team"`
+	Name        string `json:"name"`
+	Key         string `json:"key"`
+	Description string `json:"description"`
+	Private     bool   `json:"private"`
 }
