@@ -37,6 +37,6 @@ func (r *Projects) buildProjectsTeamBody(ro *ProjectsTeamOptions) string {
 
 func (r *Projects) CreateOnTeam(ro *ProjectsTeamOptions) (interface{}, error) {
 	data := r.buildProjectsTeamBody(ro)
-	urlStr := r.c.requestUrl("/teams/%s/hooks", ro.Team)
+	urlStr := r.c.requestUrl("/teams/%s/projects", ro.Team)
 	return r.c.execute("POST", urlStr, data)
 }
